@@ -18,7 +18,6 @@ class TrsInfo(object):
     web_trans = ""
     phonetic = ""
 
-
 class Youdao(object):
 
     def __init__(self):
@@ -33,6 +32,7 @@ class Youdao(object):
     def auto_translate(self, words):
         self._init_trs()
         self._trs_info.word = words
+        words = words.replace("_", " ")
         url = "http://dict.youdao.com/search"
         data = {"keyfrom" : "deskdict.mini", "q" : words, "doctype" : "xml", "xmlVersion" : 8.2,
                 "client" : "deskdict", "id" : "fef0101011fbaf8c", "vendor": "unknown", 
@@ -48,17 +48,28 @@ class Youdao(object):
             sublime.status_message(e)
             return self._trs_info
         dom = parseString(ret)
+        web_trans = self.parser_web_trans(dom)
         simple_dict_nodes = dom.getElementsByTagName("simple-dict")
         if not simple_dict_nodes:
+            if web_trans:
+                self._trs_info.trans = web_trans
             return self._trs_info
         simple_dict_node = simple_dict_nodes[0]
-        trs = self.parse_trs(simple_dict_node)
+        trs = self.parse_trs(simple_dict_node) 
         if not trs:
             return self._trs_info
         self._trs_info.trans = trs
         self._trs_info.phonetic = self.parse_phonetic(simple_dict_node)
         return self._trs_info
 
+    def parser_web_trans(self, node):
+        web_nodes = node.getElementsByTagName("web-translation")
+        if not web_nodes:
+            return ""   
+        value_nodes = web_nodes[0].getElementsByTagName("value")
+        if not value_nodes:
+            return ""
+        return "<br>".join([node.firstChild.wholeText for node in value_nodes if node.firstChild])
 
     def get_node_text(self, node, tag):
         nodes = node.getElementsByTagName(tag)
@@ -89,7 +100,7 @@ class Youdao(object):
             ret_string = "<br>".join([node.firstChild.wholeText for node in i_nodes if node.firstChild])
         except Exception:
             ret_string = ""
-        return ret_string         
+        return ret_string           
 
 
 youdao = Youdao()
