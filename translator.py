@@ -39,8 +39,11 @@ class Youdao(object):
                 "in" : "YoudaoDict", "appVer" : "5.4.46.5554", "appZengqiang" : 0, "le" : "eng", "LTH" : 140}
 
         url = "%s?%s" % (url, urlparse.urlencode(data));
+        req = request.Request(url)
+        req.add_header('User-Agent','Youdao Desktop Dict (Windows 6.1.7601)')
+        sublime.status_message(url)
         try:
-            ret = request.urlopen(url, timeout=10).read()
+            ret = request.urlopen(req, timeout=10).read()
         except Exception as e:
             sublime.status_message(e)
             return self._trs_info
