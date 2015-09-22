@@ -5,12 +5,11 @@
 import sublime
 import sublime_plugin
 import threading
+import styled_popup
 import urllib.request as request
 import urllib.parse  as urlparse
 from copy import deepcopy
 from xml.dom.minidom import parseString
-
-from . import styled_popup
 
 class TrsInfo(object):
     word = ""
