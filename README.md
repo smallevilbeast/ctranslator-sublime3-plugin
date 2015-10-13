@@ -13,7 +13,7 @@ weibo: [http://weibo.com/houshao55](http://weibo.com/houshao55)
 ##Usage
 
 
-Use the keyboard shortcut *CTRL + Shift + H*  ( *COMMAND + Shift + H* on Mac OS X ).
+Use the keyboard shortcut *CTRL + Alt + H*  ( *COMMAND + Alt + H* on Mac OS X ).
 
     
 ## Installation
